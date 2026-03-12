@@ -98,8 +98,8 @@ def build_server(service: LongbridgeService | None = None) -> FastMCP:
     mcp = FastMCP(
         name="Longbridge",
         instructions=(
-            "Longbridge OpenAPI MCP server. Use the read-only quote and account tools by default. "
-            "Write tools are available only when LONGBRIDGE_MCP_ENABLE_WRITE_TOOLS=true."
+            "Longbridge OpenAPI MCP server. Quote tools are enabled by default. "
+            "Set LONGBRIDGE_MCP_QUOTE_ONLY=false to enable trade and account tools."
         ),
     )
 
@@ -378,7 +378,7 @@ def build_server(service: LongbridgeService | None = None) -> FastMCP:
         params = _validated(MarginRatioInput, symbol=symbol)
         return gateway.call(gateway.trade_context.margin_ratio, params.symbol)
 
-    read_tools = [
+    quote_tools = [
         ("quote-static-info", "Get basic information for one or more securities.", quote_static_info),
         ("quote-realtime-info", "Get real-time quotes for one or more securities.", quote_realtime_info),
         ("quote-depth", "Get order book depth for a security.", quote_depth),
@@ -402,6 +402,9 @@ def build_server(service: LongbridgeService | None = None) -> FastMCP:
         ("quote-participants", "Get market participants.", quote_participants),
         ("quote-level", "Get your quote level.", quote_level),
         ("quote-package-details", "Get quote package details.", quote_package_details),
+    ]
+
+    trade_tools = [
         ("trade-history-executions", "Get historical executions.", trade_history_executions),
         ("trade-today-executions", "Get today's executions.", trade_today_executions),
         ("trade-account-balance", "Get account balance.", trade_account_balance),
@@ -414,10 +417,14 @@ def build_server(service: LongbridgeService | None = None) -> FastMCP:
         ("trade-margin-ratio", "Get margin ratio for a symbol.", trade_margin_ratio),
     ]
 
-    for name, description, fn in read_tools:
+    for name, description, fn in quote_tools:
         _register_tool(mcp, fn, name=name, description=description)
 
-    if settings.enable_write_tools:
+    if not settings.quote_only:
+        for name, description, fn in trade_tools:
+            _register_tool(mcp, fn, name=name, description=description)
+
+    if not settings.quote_only:
         def trade_submit_order(
             symbol: str,
             order_type: str,

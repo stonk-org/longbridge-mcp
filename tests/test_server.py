@@ -187,38 +187,38 @@ def call_result(server, name, arguments):
     return structured["result"]
 
 
-def test_default_server_omits_write_tools(monkeypatch):
-    monkeypatch.delenv("LONGBRIDGE_MCP_ENABLE_WRITE_TOOLS", raising=False)
+def test_default_server_is_quote_only(monkeypatch):
+    monkeypatch.delenv("LONGBRIDGE_MCP_QUOTE_ONLY", raising=False)
     server = build_server(FakeService())
     names = tool_names(server)
     assert "quote-static-info" in names
+    assert "trade-history-orders" not in names
     assert "trade-submit-order" not in names
 
 
-def test_write_enabled_server_registers_write_tools(monkeypatch):
-    monkeypatch.setenv("LONGBRIDGE_MCP_ENABLE_WRITE_TOOLS", "true")
+def test_quote_only_false_registers_trade_and_write_tools(monkeypatch):
+    monkeypatch.setenv("LONGBRIDGE_MCP_QUOTE_ONLY", "false")
     server = build_server(FakeService())
     names = tool_names(server)
+    assert "trade-history-orders" in names
     assert "trade-submit-order" in names
     assert "quote-watch-list-delete-group" in names
 
 
 def test_call_legacy_quote_tool(monkeypatch):
-    monkeypatch.delenv("LONGBRIDGE_MCP_ENABLE_WRITE_TOOLS", raising=False)
     server = build_server(FakeService())
     result = call_result(server, "quote-static-info", {"symbols": ["AAPL.US"]})
     assert result == [{"symbols": ["AAPL.US"], "kind": "static"}]
 
 
 def test_call_extended_quote_tool(monkeypatch):
-    monkeypatch.delenv("LONGBRIDGE_MCP_ENABLE_WRITE_TOOLS", raising=False)
     server = build_server(FakeService())
     result = call_result(server, "quote-security-list", {"market": "us"})
     assert result == {"market": "US", "category": None}
 
 
 def test_call_trade_read_tool(monkeypatch):
-    monkeypatch.delenv("LONGBRIDGE_MCP_ENABLE_WRITE_TOOLS", raising=False)
+    monkeypatch.setenv("LONGBRIDGE_MCP_QUOTE_ONLY", "false")
     server = build_server(FakeService())
     result = call_result(
         server,

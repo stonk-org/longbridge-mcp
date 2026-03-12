@@ -1,11 +1,11 @@
 from longbridge_mcp.config import load_settings
 
 
-def test_load_settings_defaults_to_read_only():
+def test_load_settings_defaults_to_quote_only():
     settings = load_settings({})
-    assert settings.enable_write_tools is False
+    assert settings.quote_only is True
 
 
-def test_load_settings_parses_true():
-    settings = load_settings({"LONGBRIDGE_MCP_ENABLE_WRITE_TOOLS": "true"})
-    assert settings.enable_write_tools is True
+def test_load_settings_parses_quote_only_false():
+    settings = load_settings({"LONGBRIDGE_MCP_QUOTE_ONLY": "false"})
+    assert settings.quote_only is False

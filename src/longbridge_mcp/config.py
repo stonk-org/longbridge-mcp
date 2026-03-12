@@ -15,21 +15,21 @@ def _parse_bool(value: str | None, *, default: bool) -> bool:
     if normalized in {"0", "false", "no", "off"}:
         return False
     raise ValueError(
-        "LONGBRIDGE_MCP_ENABLE_WRITE_TOOLS must be one of: true, false, 1, 0, yes, no, on, off"
+        "Boolean MCP settings must be one of: true, false, 1, 0, yes, no, on, off"
     )
 
 
 @dataclass(frozen=True)
 class MCPSettings:
-    enable_write_tools: bool = False
+    quote_only: bool = True
 
 
 def load_settings(environ: dict[str, str] | None = None) -> MCPSettings:
     values = environ or os.environ
     return MCPSettings(
-        enable_write_tools=_parse_bool(
-            values.get("LONGBRIDGE_MCP_ENABLE_WRITE_TOOLS"),
-            default=False,
+        quote_only=_parse_bool(
+            values.get("LONGBRIDGE_MCP_QUOTE_ONLY"),
+            default=True,
         )
     )
 
