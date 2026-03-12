@@ -1,0 +1,29 @@
+[project]
+name = "longbridge-mcp"
+version = "0.1.0"
+description = "A uvx-runnable MCP server for Longbridge OpenAPI"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "longbridge>=0.4.0",
+  "mcp>=1.17.0",
+  "pydantic>=2.11.0",
+]
+
+[project.scripts]
+longbridge-mcp = "longbridge_mcp.server:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.0",
+]
+
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/longbridge_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
