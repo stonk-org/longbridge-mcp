@@ -1,6 +1,8 @@
 from datetime import date, datetime
 from decimal import Decimal
 
+from longbridge.openapi import DerivativeType, SecurityBoard, TradeStatus
+
 from longbridge_mcp.serialize import serialize
 
 
@@ -24,4 +26,20 @@ def test_serialize_nested_values():
             "2026-03-12T09:30:00",
             {"amount": "1.23", "created": "2026-03-12", "foo": "bar"},
         ],
+    }
+
+
+def test_serialize_longbridge_enum_like_values():
+    result = serialize(
+        {
+            "trade_status": TradeStatus.Normal,
+            "board": SecurityBoard.USMain,
+            "stock_derivatives": [DerivativeType.Option],
+        }
+    )
+
+    assert result == {
+        "trade_status": "TradeStatus.Normal",
+        "board": "SecurityBoard.USMain",
+        "stock_derivatives": ["DerivativeType.Option"],
     }
