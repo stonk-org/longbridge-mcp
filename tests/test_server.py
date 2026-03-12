@@ -187,17 +187,17 @@ def call_result(server, name, arguments):
     return structured["result"]
 
 
-def test_default_server_is_quote_only(monkeypatch):
-    monkeypatch.delenv("LONGBRIDGE_MCP_QUOTE_ONLY", raising=False)
+def test_default_server_is_read_only(monkeypatch):
+    monkeypatch.delenv("LONGBRIDGE_MCP_READ_ONLY", raising=False)
     server = build_server(FakeService())
     names = tool_names(server)
     assert "quote-static-info" in names
-    assert "trade-history-orders" not in names
+    assert "trade-history-orders" in names
     assert "trade-submit-order" not in names
 
 
-def test_quote_only_false_registers_trade_and_write_tools(monkeypatch):
-    monkeypatch.setenv("LONGBRIDGE_MCP_QUOTE_ONLY", "false")
+def test_read_only_false_registers_write_tools(monkeypatch):
+    monkeypatch.setenv("LONGBRIDGE_MCP_READ_ONLY", "false")
     server = build_server(FakeService())
     names = tool_names(server)
     assert "trade-history-orders" in names
@@ -218,7 +218,6 @@ def test_call_extended_quote_tool(monkeypatch):
 
 
 def test_call_trade_read_tool(monkeypatch):
-    monkeypatch.setenv("LONGBRIDGE_MCP_QUOTE_ONLY", "false")
     server = build_server(FakeService())
     result = call_result(
         server,

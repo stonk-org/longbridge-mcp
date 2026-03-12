@@ -21,14 +21,14 @@ def _parse_bool(value: str | None, *, default: bool) -> bool:
 
 @dataclass(frozen=True)
 class MCPSettings:
-    quote_only: bool = True
+    read_only: bool = True
 
 
 def load_settings(environ: dict[str, str] | None = None) -> MCPSettings:
     values = environ or os.environ
     return MCPSettings(
-        quote_only=_parse_bool(
-            values.get("LONGBRIDGE_MCP_QUOTE_ONLY"),
+        read_only=_parse_bool(
+            values.get("LONGBRIDGE_MCP_READ_ONLY"),
             default=True,
         )
     )

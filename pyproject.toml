@@ -1,6 +1,6 @@
 [project]
 name = "longbridge-mcp"
-version = "0.1.1"
+version = "0.1.2"
 description = "A uvx-runnable MCP server for Longbridge OpenAPI"
 readme = "README.md"
 requires-python = ">=3.12"

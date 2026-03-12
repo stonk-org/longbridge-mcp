@@ -28,7 +28,7 @@ Optional Longbridge SDK passthrough:
 
 Server safety switch:
 
-- `LONGBRIDGE_MCP_QUOTE_ONLY=true` by default
+- `LONGBRIDGE_MCP_READ_ONLY=true` by default
 
 ## Usage
 
@@ -56,7 +56,7 @@ For an MCP client configuration:
         "LONGBRIDGE_APP_KEY": "your-app-key",
         "LONGBRIDGE_APP_SECRET": "your-app-secret",
         "LONGBRIDGE_ACCESS_TOKEN": "your-access-token",
-        "LONGBRIDGE_MCP_QUOTE_ONLY": "true"
+        "LONGBRIDGE_MCP_READ_ONLY": "true"
       }
     }
   }
@@ -65,7 +65,7 @@ For an MCP client configuration:
 
 ## Tool Surface
 
-Quote tools always available by default:
+Quote tools always available:
 
 - `quote-static-info`
 - `quote-realtime-info`
@@ -91,7 +91,7 @@ Quote tools always available by default:
 - `quote-level`
 - `quote-package-details`
 
-Trade read tools are only registered when `LONGBRIDGE_MCP_QUOTE_ONLY=false`:
+Trade read tools are also available by default:
 
 - `trade-history-executions`
 - `trade-today-executions`
@@ -104,7 +104,7 @@ Trade read tools are only registered when `LONGBRIDGE_MCP_QUOTE_ONLY=false`:
 - `trade-order-detail`
 - `trade-margin-ratio`
 
-Write tools are also registered when `LONGBRIDGE_MCP_QUOTE_ONLY=false`:
+Write tools are only registered when `LONGBRIDGE_MCP_READ_ONLY=false`:
 
 - `trade-submit-order`
 - `trade-cancel-order`

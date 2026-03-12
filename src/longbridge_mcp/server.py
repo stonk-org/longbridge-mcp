@@ -98,8 +98,8 @@ def build_server(service: LongbridgeService | None = None) -> FastMCP:
     mcp = FastMCP(
         name="Longbridge",
         instructions=(
-            "Longbridge OpenAPI MCP server. Quote tools are enabled by default. "
-            "Set LONGBRIDGE_MCP_QUOTE_ONLY=false to enable trade and account tools."
+            "Longbridge OpenAPI MCP server. Quote and trade read tools are enabled by default. "
+            "Set LONGBRIDGE_MCP_READ_ONLY=false to enable mutating trade and watch list tools."
         ),
     )
 
@@ -420,11 +420,10 @@ def build_server(service: LongbridgeService | None = None) -> FastMCP:
     for name, description, fn in quote_tools:
         _register_tool(mcp, fn, name=name, description=description)
 
-    if not settings.quote_only:
-        for name, description, fn in trade_tools:
-            _register_tool(mcp, fn, name=name, description=description)
+    for name, description, fn in trade_tools:
+        _register_tool(mcp, fn, name=name, description=description)
 
-    if not settings.quote_only:
+    if not settings.read_only:
         def trade_submit_order(
             symbol: str,
             order_type: str,
