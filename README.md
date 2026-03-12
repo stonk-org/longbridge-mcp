@@ -32,7 +32,13 @@ Server safety switch:
 
 ## Usage
 
-Run locally from this repo:
+Run from PyPI:
+
+```bash
+uvx longbridge-mcp
+```
+
+Run locally from this repo during development:
 
 ```bash
 uvx --from . longbridge-mcp
@@ -45,7 +51,7 @@ For an MCP client configuration:
   "mcpServers": {
     "longbridge": {
       "command": "uvx",
-      "args": ["--from", "/absolute/path/to/longbridge-mcp", "longbridge-mcp"],
+      "args": ["longbridge-mcp"],
       "env": {
         "LONGBRIDGE_APP_KEY": "your-app-key",
         "LONGBRIDGE_APP_SECRET": "your-app-secret",
